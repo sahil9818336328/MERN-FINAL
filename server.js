@@ -3,26 +3,24 @@ import 'express-async-errors'
 import * as dotenv from 'dotenv'
 import morgan from 'morgan'
 import jobRouter from './routes/jobRouter.js'
+import authRouter from './routes/authRouter.js'
 import mongoose from 'mongoose'
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js'
 
 dotenv.config()
+
+// TO HAVE ACCESS TO REQ.BODY
 const app = express()
 app.use(express.json())
 
+// ONLY RUN LOGS IN DEVELOPMENT
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
 }
 
-app.get('/', (req, res) => {
-  res.send('hello world')
-})
-
-app.post('/', (req, res) => {
-  res.json({ msg: 'data received', data: req.body })
-})
-
+// ROUTERS
 app.use('/api/v1/jobs', jobRouter)
+app.use('/api/v1/auth', authRouter)
 
 // FOR IN-COMING REQUESTS
 app.use('*', (req, res) => {
@@ -34,6 +32,7 @@ app.use(errorHandlerMiddleware)
 
 const port = process.env.PORT || 5000
 
+// CONNECT DB AND START SERVER
 try {
   await mongoose.connect(process.env.MONGO_URL)
   app.listen(port, () => {
