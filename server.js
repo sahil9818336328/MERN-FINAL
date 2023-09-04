@@ -4,6 +4,7 @@ import * as dotenv from 'dotenv'
 import morgan from 'morgan'
 import jobRouter from './routes/jobRouter.js'
 import mongoose from 'mongoose'
+import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js'
 
 dotenv.config()
 const app = express()
@@ -29,10 +30,7 @@ app.use('*', (req, res) => {
 })
 
 // WITHIN EXISTING REQUEST
-app.use((err, req, res, next) => {
-  console.log(err)
-  res.status(500).json({ msg: 'something went wrong' })
-})
+app.use(errorHandlerMiddleware)
 
 const port = process.env.PORT || 5000
 
