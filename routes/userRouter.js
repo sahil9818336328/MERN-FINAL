@@ -6,12 +6,15 @@ import {
   getApplicationStats,
   updateUser,
 } from '../controllers/userController.js'
-import { authorizePermissions } from '../middleware/validationMiddleware.js'
+import {
+  authorizePermissions,
+  validateUpdateUserInput,
+} from '../middleware/validationMiddleware.js'
 
 router.get('/current-user', getCurrentUser)
 router.get('/admin/app-stats', [
   authorizePermissions('admin'),
   getApplicationStats,
 ])
-router.patch('/update-user', updateUser)
+router.patch('/update-user', validateUpdateUserInput, updateUser)
 export default router
