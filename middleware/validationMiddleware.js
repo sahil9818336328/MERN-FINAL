@@ -60,25 +60,25 @@ export const validateIdParam = withValidationErrors([
 
 // REGISTER VALIDATION
 export const validateRegisterInput = withValidationErrors([
-  body('name').notEmpty().withMessage('name is required'),
+  body('name').notEmpty().withMessage('Name is required'),
   body('email')
     .notEmpty()
-    .withMessage('email is required')
+    .withMessage('Email is required')
     .isEmail()
-    .withMessage('invalid email format')
+    .withMessage('Invalid email format')
     .custom(async (email) => {
       const user = await User.findOne({ email })
       if (user) {
-        throw new BadRequestError('email already exists')
+        throw new BadRequestError('Email already exists')
       }
     }),
   body('password')
     .notEmpty()
-    .withMessage('password is required')
+    .withMessage('Password is required')
     .isLength({ min: 8 })
-    .withMessage('password must be at least 8 characters long'),
-  body('location').notEmpty().withMessage('location is required'),
-  body('lastName').notEmpty().withMessage('last name is required'),
+    .withMessage('Password must be at least 8 characters long'),
+  body('location').notEmpty().withMessage('Location is required'),
+  body('lastName').notEmpty().withMessage('Last name is required'),
 ])
 
 //LOGIN VALIDATION
