@@ -9,15 +9,16 @@ export const register = async (req, res) => {
   req.body.role = isFirstAccount ? 'admin' : 'user'
   const hashedPassword = await hashPassword(req.body.password)
   req.body.password = hashedPassword
-  const user = await User.create(req.body)
-  res.status(StatusCodes.OK).json({ msg: 'User created successfully' })
+  await User.create(req.body)
+  res.status(StatusCodes.OK).json({ msg: 'Registration successful' })
 }
 
 export const login = async (req, res) => {
+  console.log(req)
   const user = await User.findOne({ email: req.body.email })
   const isValidUser =
     user && (await comparePassword(req.body.password, user.password))
-  if (!isValidUser) throw new UnauthenticatedError('invalid credentials')
+  if (!isValidUser) throw new UnauthenticatedError('Invalid credentials')
   const token = createJwt({ userId: user._id, role: user.role })
   const oneDay = 1000 * 60 * 60 * 24
   res.cookie('token', token, {
@@ -25,7 +26,7 @@ export const login = async (req, res) => {
     expires: new Date(Date.now() + oneDay),
     secure: process.env.NODE_ENV === 'production',
   })
-  res.status(StatusCodes.CREATED).json({ msg: 'User logged in' })
+  res.status(StatusCodes.CREATED).json({ msg: 'Login successful' })
 }
 
 export const logout = (req, res) => {
@@ -33,5 +34,5 @@ export const logout = (req, res) => {
     httpOnly: true,
     expires: new Date(Date.now()),
   })
-  res.status(StatusCodes.OK).json({ msg: 'user logged out!' })
+  res.status(StatusCodes.OK).json({ msg: 'Logout successful' })
 }
