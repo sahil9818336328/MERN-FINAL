@@ -1,6 +1,5 @@
 import Job from '../models/jobModels.js'
 import { StatusCodes } from 'http-status-codes'
-import { NotFoundError } from '../errors/customErrors.js'
 
 // GET ALL JOBS
 export const getAllJobs = async (req, res) => {
@@ -12,7 +11,7 @@ export const getAllJobs = async (req, res) => {
 export const createJob = async (req, res) => {
   req.body.createdBy = req.user.userId
   const job = await Job.create(req.body)
-  res.status(StatusCodes.CREATED).json({ job })
+  res.status(StatusCodes.CREATED).json({ job, msg: 'Job added successfully' })
 }
 
 // GET SINGLE JOB
@@ -27,12 +26,16 @@ export const updateJob = async (req, res) => {
     new: true,
   })
 
-  res.status(StatusCodes.OK).json({ msg: 'job modified', job: updatedJob })
+  res
+    .status(StatusCodes.OK)
+    .json({ msg: `Job with id ${req.params.id} updated.`, job: updatedJob })
 }
 
 // DELETE JOB
 export const deleteJob = async (req, res) => {
   const removedJob = await Job.findByIdAndDelete(req.params.id)
 
-  res.status(StatusCodes.OK).json({ msg: 'job deleted', job: removedJob })
+  res
+    .status(StatusCodes.OK)
+    .json({ msg: `Job with id ${req.params.id} deleted.`, job: removedJob })
 }

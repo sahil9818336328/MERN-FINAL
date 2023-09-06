@@ -6,8 +6,7 @@ import { BigSidebar, Navbar, SmallSidebar } from '../components'
 import { checkDefaultTheme } from '../App'
 import { toast } from 'react-toastify'
 
-const DashboardContext = createContext()
-
+// PRE-FETCHING DATA USING LOADER
 export const loader = async () => {
   try {
     const { data } = await customFetch.get('/users/current-user')
@@ -17,6 +16,7 @@ export const loader = async () => {
   }
 }
 
+const DashboardContext = createContext()
 const DashboardLayout = () => {
   const { user } = useLoaderData()
   const navigate = useNavigate()
@@ -35,9 +35,9 @@ const DashboardLayout = () => {
   }
 
   const logoutUser = async () => {
-    navigate('/')
     const response = await customFetch.get('/auth/logout')
     toast.success(response.data.msg)
+    navigate('/')
   }
 
   return (
@@ -58,7 +58,7 @@ const DashboardLayout = () => {
           <div>
             <Navbar />
             <div className='dashboard-page'>
-              <Outlet />
+              <Outlet context={{ user }} />
             </div>
           </div>
         </main>
