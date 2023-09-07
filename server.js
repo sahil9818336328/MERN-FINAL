@@ -9,8 +9,20 @@ import mongoose from 'mongoose'
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js'
 import { authenticateUser } from './middleware/authMiddleware.js'
 import cookieParser from 'cookie-parser'
+import { dirname } from 'path'
+import { fileURLToPath } from 'url'
+import path from 'path'
+import cloudinary from 'cloudinary'
 
 dotenv.config()
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+})
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 // TO HAVE ACCESS TO REQ.BODY
 const app = express()
@@ -21,6 +33,9 @@ app.use(cookieParser())
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
 }
+
+// FOR FILE UPLOAD
+app.use(express.static(path.resolve(__dirname, './public')))
 
 // ROUTERS
 app.use('/api/v1/jobs', authenticateUser, jobRouter)
