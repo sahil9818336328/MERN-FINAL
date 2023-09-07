@@ -22,7 +22,9 @@ const withValidationErrors = (validateValues) => {
         }
 
         if (errorMessages[0].startsWith('not authorized')) {
-          throw new UnauthorizedError('not authorized to access this route')
+          throw new UnauthorizedError(
+            'You are not authorized to access this route'
+          )
         }
 
         throw new BadRequestError(errorMessages)
@@ -49,11 +51,11 @@ export const validateIdParam = withValidationErrors([
     const isValid = mongoose.Types.ObjectId.isValid(value)
     if (!isValid) throw new BadRequestError('Invalid mongoDB Id')
     const job = await Job.findById(value)
-    if (!job) throw new NotFoundError(`no job with id : ${value}`)
+    if (!job) throw new NotFoundError(`No job with id : ${value}`)
     const isAdmin = req.user.role === 'admin'
     const isOwner = req.user.userId === job.createdBy.toString()
     if (!isAdmin && !isOwner)
-      throw UnauthorizedError('not authorized to access this route')
+      throw UnauthorizedError('You are not authorized to access this route')
     // IF EVERYTHING'S GOOD, PASS THE CONTROL TO THE RESPECTIVE CONTROLLER
   }),
 ])
@@ -93,26 +95,26 @@ export const validateLoginInput = withValidationErrors([
 
 // UPDATE USER
 export const validateUpdateUserInput = withValidationErrors([
-  body('name').notEmpty().withMessage('name is required'),
+  body('name').notEmpty().withMessage('Name is required'),
   body('email')
     .notEmpty()
-    .withMessage('email is required')
+    .withMessage('Email is required')
     .isEmail()
-    .withMessage('invalid email format')
+    .withMessage('Invalid email format')
     .custom(async (email, { req }) => {
       const user = await User.findOne({ email })
       if (user && user._id.toString() !== req.user.userId) {
-        throw new Error('email already exists')
+        throw new Error('Email already exists')
       }
     }),
-  body('lastName').notEmpty().withMessage('last name is required'),
-  body('location').notEmpty().withMessage('location is required'),
+  body('lastName').notEmpty().withMessage('Last name is required'),
+  body('location').notEmpty().withMessage('Location is required'),
 ])
 
 export const authorizePermissions = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
-      throw new UnauthorizedError('Unauthorized to access this route')
+      throw new UnauthorizedError('You are not authorized to access this route')
     }
     next()
   }
