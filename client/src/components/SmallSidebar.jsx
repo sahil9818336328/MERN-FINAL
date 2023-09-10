@@ -1,7 +1,7 @@
 import Wrapper from '../assets/wrappers/SmallSidebar'
 import { IoCloseOutline } from 'react-icons/io5'
 import Logo from './Logo'
-import NavLinks from './NavLinks'
+import NavLinks from './Navlinks'
 import { useDashboardContext } from '../pages/DashboardLayout'
 
 const SmallSidebar = () => {

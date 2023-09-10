@@ -1,4 +1,4 @@
-import NavLinks from './NavLinks'
+import NavLinks from './Navlinks'
 import Logo from '../components/Logo'
 import Wrapper from '../assets/wrappers/BigSidebar'
 import { useDashboardContext } from '../pages/DashboardLayout'
