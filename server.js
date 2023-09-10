@@ -13,6 +13,8 @@ import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 import path from 'path'
 import cloudinary from 'cloudinary'
+import helmet from 'helmet'
+import mongoSanitize from 'express-mongo-sanitize'
 
 dotenv.config()
 
@@ -28,6 +30,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const app = express()
 app.use(express.json())
 app.use(cookieParser())
+app.use(helmet())
+app.use(mongoSanitize())
 
 // ONLY RUN LOGS IN DEVELOPMENT
 if (process.env.NODE_ENV === 'development') {
