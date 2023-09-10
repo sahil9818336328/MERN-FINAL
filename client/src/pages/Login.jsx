@@ -1,4 +1,10 @@
-import { Link, Form, redirect, useNavigate } from 'react-router-dom'
+import {
+  Link,
+  Form,
+  redirect,
+  useNavigate,
+  useNavigation,
+} from 'react-router-dom'
 import Wrapper from '../assets/wrappers/RegisterAndLoginPage'
 import { FormRow, Logo, SubmitBtn } from '../components'
 import customFetch from '../utils/customFetch'
@@ -24,6 +30,9 @@ export const action =
 
 const Login = () => {
   const navigate = useNavigate()
+  const navigation = useNavigation()
+  const isSubmitting = navigation.state === 'loading'
+
   const loginDemoUser = async () => {
     const data = {
       email: 'test@test.com',
@@ -47,7 +56,7 @@ const Login = () => {
         <FormRow type='password' name='password' />
         <SubmitBtn />
         <button type='button' className='btn btn-block' onClick={loginDemoUser}>
-          Explore the app
+          {isSubmitting ? 'submitting...' : ' Explore the app'}
         </button>
         <p>
           Not a member yet?

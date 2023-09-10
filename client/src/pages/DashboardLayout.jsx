@@ -26,7 +26,7 @@ export const loader = (queryClient) => async () => {
 }
 
 const DashboardContext = createContext()
-const DashboardLayout = ({ queryClient }) => {
+const DashboardLayout = () => {
   // eslint-disable-next-line no-unsafe-optional-chaining
   const { user } = useQuery(userQuery)?.data
   const navigate = useNavigate()
@@ -49,7 +49,6 @@ const DashboardLayout = ({ queryClient }) => {
 
   const logoutUser = async () => {
     const response = await customFetch.get('/auth/logout')
-    queryClient.invalidateQueries()
     toast.success(response.data.msg)
     navigate('/')
   }
