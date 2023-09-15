@@ -19,7 +19,8 @@ const userQuery = {
 // PRE-FETCHING DATA USING LOADER
 export const loader = (queryClient) => async () => {
   try {
-    return await queryClient.ensureQueryData(userQuery)
+    const response = await queryClient.ensureQueryData(userQuery)
+    return response
   } catch (error) {
     return redirect('/')
   }
@@ -29,6 +30,7 @@ const DashboardContext = createContext()
 const DashboardLayout = () => {
   // eslint-disable-next-line no-unsafe-optional-chaining
   const { user } = useQuery(userQuery)?.data
+
   const navigate = useNavigate()
   const navigation = useNavigation()
   const isPageLoading = navigation.state === 'loading'
