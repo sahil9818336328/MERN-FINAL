@@ -30,7 +30,14 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const app = express()
 app.use(express.json())
 app.use(cookieParser())
-app.use(helmet())
+app.use(
+  helmet.contentSecurityPolicy({
+    useDefaults: true,
+    directives: {
+      'img-src': ["'self'", 'https: data:'],
+    },
+  })
+)
 app.use(mongoSanitize())
 
 // ONLY RUN LOGS IN DEVELOPMENT
